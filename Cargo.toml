@@ -1,0 +1,11 @@
+[package]
+name = "trait_test"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+async-trait = "0.1.52"
+chrono = { version = "0.4.19", features = ["serde"] }
+sea-orm = { version = "0.5.0", features = ["macros", "mock", "with-json", "with-chrono", "with-rust_decimal", "with-uuid", "runtime-tokio-rustls", "sqlx-sqlite"], default-features = false }
