@@ -1,5 +1,7 @@
 use chrono::NaiveDateTime;
 use sea_orm::{ActiveValue, IntoActiveModel};
+use crate::CrudModelTrait;
+use crate::db_user::ActiveModel;
 
 #[derive(Clone, Debug, Default)]
 pub struct User {
@@ -19,6 +21,8 @@ impl From<crate::db_user::Model> for User {
         }
     }
 }
+
+impl CrudModelTrait<crate::db_user::Entity, crate::db_user::ActiveModel, UserCreate, UserUpdate> for User {}
 
 #[derive(Clone, Debug, Default)]
 pub struct UserCreate {
@@ -50,29 +54,6 @@ impl IntoActiveModel<crate::db_user::ActiveModel> for UserCreate {
     }
 }
 
-// #[allow(clippy::from_over_into)]
-// impl Into<crate::db_user::ActiveModel> for UserCreate {
-//     fn into(self) -> crate::db_user::ActiveModel {
-//         let mut active_model = crate::db_user::ActiveModel {
-//             email: ActiveValue::Set(self.email),
-//             ..Default::default()
-//         };
-//
-//         // Hashing password
-//         let password_hash = self.password;
-//         active_model.password_hash = ActiveValue::Set(password_hash);
-//
-//         if let Some(inserted_at) = self.inserted_at {
-//             active_model.inserted_at = ActiveValue::Set(Some(inserted_at));
-//         }
-//         if let Some(updated_at) = self.updated_at {
-//             active_model.updated_at = ActiveValue::Set(Some(updated_at));
-//         }
-//
-//         active_model
-//     }
-// }
-
 #[derive(Clone, Debug, Default)]
 pub struct UserUpdate {
     pub id: i32,
@@ -82,9 +63,8 @@ pub struct UserUpdate {
     pub updated_at: Option<Option<NaiveDateTime>>,
 }
 
-#[allow(clippy::from_over_into)]
-impl Into<crate::db_user::ActiveModel> for UserUpdate {
-    fn into(self) -> crate::db_user::ActiveModel {
+impl IntoActiveModel<crate::db_user::ActiveModel> for UserUpdate {
+    fn into_active_model(self) -> ActiveModel {
         let mut active_model = crate::db_user::ActiveModel {
             id: ActiveValue::Set(self.id),
             ..Default::default()
